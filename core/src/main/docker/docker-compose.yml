@@ -1,0 +1,35 @@
+version: "3"
+
+networks:
+  localnet:
+
+services:
+
+  # Relational Database Provider
+  brainweb_db: 
+    image: postgres:10-alpine
+    container_name: brainweb-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - brainweb-postgresql-volume:/var/lib/postgresql/data
+    networks:
+      - localnet
+
+  # PgAdmin 4
+  pgAdmin:
+    image: dpage/pgadmin4:4.12
+    container_name: brainweb-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=brainweb
+      - PGADMIN_DEFAULT_PASSWORD=brainweb
+    ports:
+      - 9090:80
+    networks:
+      - localnet
+    
+volumes:
+    brainweb-postgresql-volume:
+      external: true    
